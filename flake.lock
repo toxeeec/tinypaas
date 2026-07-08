@@ -67,10 +67,45 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1781607440,
+        "narHash": "sha256-rxO+uc/KFbSJp+pgyXRuAX6QlG9hJdnt0BXpEQRXY+U=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3e41b24abd260e8f71dbe2f5737d24122f972158",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nub": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1783533413,
+        "narHash": "sha256-zeLmiZ42LVX5Tm2SqShnj8sX8AAJonhqJMGcD4zyTPM=",
+        "owner": "nubjs",
+        "repo": "nub",
+        "rev": "67255715052f36631a7d66bca61e0e6106b04e0c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nubjs",
+        "repo": "nub",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "git-hooks": "git-hooks",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nub": "nub"
       }
     }
   },

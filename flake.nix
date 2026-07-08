@@ -2,11 +2,13 @@
   inputs = {
     git-hooks.url = "github:cachix/git-hooks.nix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nub.url = "github:nubjs/nub";
   };
   outputs = {
     self,
     git-hooks,
     nixpkgs,
+    nub,
     ...
   }: let
     forAllSystems = function:
@@ -34,7 +36,7 @@
       in
         pkgs.mkShell {
           inherit shellHook;
-          packages = enabledPackages;
+          packages = enabledPackages ++ [nub.packages.${system}.nub];
         };
     });
   };
