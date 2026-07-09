@@ -7,12 +7,15 @@
   "type": "module",
   "scripts": {
     "fmt": "oxfmt",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "prepare": "effect-tsgo patch"
   },
   "devDependencies": {
-    "oxfmt": "0.57.0",
-    "oxlint": "1.71.0",
-    "oxlint-tsgolint": "^0.24.0"
+    "@effect/tsgo": "0.18.1",
+    "oxfmt": "0.58.0",
+    "oxlint": "1.73.0",
+    "oxlint-tsgolint": "^0.24.0",
+    "typescript": "^7.0.2"
   },
   "devEngines": {
     "packageManager": {
@@ -20,5 +23,8 @@
       "version": "0.4.4",
       "onFail": "error"
     }
+  },
+  "allowBuilds": {
+    "msgpackr-extract": true
   }
 }
