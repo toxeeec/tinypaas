@@ -1,0 +1,8 @@
+{
+  "name": "tinypaas-demo-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch index.js"
+  }
+}
