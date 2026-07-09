@@ -48,7 +48,10 @@
           inherit shellHook;
           packages =
             enabledPackages
-            ++ [nub.packages.${system}.nub];
+            ++ [nub.packages.${system}.nub]
+            ++ (with pkgs; [
+              nodejs_26
+            ]);
         };
     });
   };
