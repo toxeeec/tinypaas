@@ -5,4 +5,13 @@ export default defineConfig({
 	semi: false,
 	sortImports: true,
 	useTabs: true,
+	overrides: [
+		{
+			files: ["**/package.json"],
+			options: {
+				tabWidth: 2,
+				useTabs: false,
+			},
+		},
+	],
 })

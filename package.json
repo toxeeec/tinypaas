@@ -1,24 +1,24 @@
 {
-	"$schema": "https://json.schemastore.org/package.json",
-	"private": true,
-	"workspaces": [
-		"packages/*"
-	],
-	"type": "module",
-	"scripts": {
-		"fmt": "oxfmt",
-		"lint": "oxlint"
-	},
-	"devDependencies": {
-		"oxfmt": "0.57.0",
-		"oxlint": "1.71.0",
-		"oxlint-tsgolint": "^0.24.0"
-	},
-	"devEngines": {
-		"packageManager": {
-			"name": "nub",
-			"version": "0.4.4",
-			"onFail": "error"
-		}
-	}
+  "$schema": "https://json.schemastore.org/package.json",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "fmt": "oxfmt",
+    "lint": "oxlint"
+  },
+  "devDependencies": {
+    "oxfmt": "0.57.0",
+    "oxlint": "1.71.0",
+    "oxlint-tsgolint": "^0.24.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "nub",
+      "version": "0.4.4",
+      "onFail": "error"
+    }
+  }
 }

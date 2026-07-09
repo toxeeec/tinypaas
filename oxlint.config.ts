@@ -15,6 +15,7 @@ export default defineConfig({
 	},
 	plugins: ["typescript", "unicorn", "oxc", "import", "node", "promise"],
 	rules: {
+		"no-shadow": "off",
 		"typescript/no-explicit-any": "error",
 	},
 })

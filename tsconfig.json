@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"exactOptionalPropertyTypes": true,
+		"isolatedModules": true,
+		"module": "NodeNext",
+		"moduleDetection": "force",
+		"moduleResolution": "NodeNext",
+		"noUncheckedIndexedAccess": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true
+	}
+}
