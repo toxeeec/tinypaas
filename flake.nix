@@ -25,6 +25,16 @@
 
         hooks = {
           alejandra.enable = true;
+          oxfmt = {
+            enable = true;
+            entry = "nub exec oxfmt";
+            types_or = ["json" "ts"];
+          };
+          oxlint = {
+            enable = true;
+            entry = "nub exec oxlint";
+            types_or = ["ts"];
+          };
           statix.enable = true;
         };
       };
@@ -36,7 +46,9 @@
       in
         pkgs.mkShell {
           inherit shellHook;
-          packages = enabledPackages ++ [nub.packages.${system}.nub];
+          packages =
+            enabledPackages
+            ++ [nub.packages.${system}.nub];
         };
     });
   };
