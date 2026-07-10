@@ -20,9 +20,12 @@
 			{
 				"name": "@effect/language-service",
 				"diagnosticSeverity": {
+					"anyUnknownInErrorContext": "error",
 					"asyncFunction": "warning",
 					"cryptoRandomUUID": "warning",
 					"cryptoRandomUUIDInEffect": "warning",
+					"deterministicKeys": "warning",
+					"effectDoNotation": "warning",
 					"extendsNativeError": "warning",
 					"globalConsole": "warning",
 					"globalConsoleInEffect": "warning",
@@ -35,12 +38,20 @@
 					"globalTimers": "warning",
 					"globalTimersInEffect": "warning",
 					"instanceOfSchema": "warning",
-					"newPromise": "warning",
+					"missedPipeableOpportunity": "warning",
+					"missingEffectServiceDependency": "error",
+					"nestedEffectGenYield": "warning",
+					"newPromise": "error",
+					"newSchemaClass": "warning",
 					"nodeBuiltinImport": "warning",
 					"preferSchemaOverJson": "warning",
 					"processEnv": "warning",
 					"processEnvInEffect": "warning",
-					"unsafeEffectTypeAssertion": "warning"
+					"schemaUnionOfLiterals": "warning",
+					"serviceNotAsClass": "warning",
+					"strictBooleanExpressions": "error",
+					"unnecessaryArrowBlock": "warning",
+					"unsafeEffectTypeAssertion": "error"
 				}
 			}
 		]
