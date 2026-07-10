@@ -6,9 +6,11 @@
   ],
   "type": "module",
   "scripts": {
+    "check": "nub run lint && nub run typecheck",
     "fmt": "oxfmt",
     "lint": "oxlint",
-    "prepare": "effect-tsgo patch"
+    "prepare": "effect-tsgo patch",
+    "typecheck": "nub run --recursive typecheck"
   },
   "devDependencies": {
     "@effect/tsgo": "0.18.1",

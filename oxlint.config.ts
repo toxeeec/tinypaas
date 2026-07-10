@@ -11,7 +11,6 @@ export default defineConfig({
 	},
 	options: {
 		typeAware: true,
-		typeCheck: true,
 	},
 	plugins: ["typescript", "unicorn", "oxc", "import", "node", "promise"],
 	rules: {

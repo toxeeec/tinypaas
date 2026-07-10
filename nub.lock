@@ -24,7 +24,16 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
-  packages/tinypaas-cli:
+  packages/cli:
+    dependencies:
+      '@effect/platform-node':
+        specifier: ^4.0.0-beta.94
+        version: 4.0.0-beta.94(effect@4.0.0-beta.94)(ioredis@5.11.1)
+      effect:
+        specifier: ^4.0.0-beta.94
+        version: 4.0.0-beta.94
+
+  packages/server:
     dependencies:
       '@effect/platform-node':
         specifier: ^4.0.0-beta.94

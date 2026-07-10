@@ -35,4 +35,6 @@ const deploy = Command.make("deploy", { path }, () => Effect.void)
 
 const tps = Command.make("tps").pipe(Command.withSubcommands([deploy]))
 const program = Command.run(tps, { version: packageJson.version })
+
+// @effect-diagnostics-next-line strictEffectProvide:off
 program.pipe(Effect.provide(NodeServices.layer), NodeRuntime.runMain)

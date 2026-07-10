@@ -8,6 +8,7 @@
 		"incremental": true,
 		"isolatedModules": true,
 		"moduleDetection": "force",
+		"noEmit": true,
 		"noImplicitOverride": true,
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
@@ -50,6 +51,7 @@
 					"schemaUnionOfLiterals": "warning",
 					"serviceNotAsClass": "warning",
 					"strictBooleanExpressions": "error",
+					"strictEffectProvide": "warning",
 					"unnecessaryArrowBlock": "warning",
 					"unsafeEffectTypeAssertion": "error"
 				}
