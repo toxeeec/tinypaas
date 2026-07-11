@@ -1,58 +1,100 @@
 {
   inputs = {
-    git-hooks.url = "github:cachix/git-hooks.nix";
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nub.url = "github:nubjs/nub";
+    nub = {
+      url = "github:nubjs/nub";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = {
-    self,
+  outputs = inputs @ {
     git-hooks,
     nixpkgs,
-    nub,
     ...
   }: let
+    systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
     forAllSystems = function:
-      nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed (
+      nixpkgs.lib.genAttrs systems (
         system: function system nixpkgs.legacyPackages.${system}
       );
   in {
-    formatter = forAllSystems (_system: pkgs: pkgs.alejandra);
+    checks = forAllSystems (system: pkgs: let
+      inherit (inputs.nub.packages.${system}) nub;
+      inherit (import ./nix/nub.nix {inherit pkgs;}) fetchNubDeps nubConfigHook;
+      nubDeps = fetchNubDeps {
+        pname = "tinypaas";
+        src = pkgs.lib.fileset.toSource {
+          root = ./.;
+          fileset = pkgs.lib.fileset.unions [
+            ./package.json
+            ./nub.lock
+            ./.npmrc
 
-    checks = forAllSystems (system: pkgs: {
-      pre-commit-check = git-hooks.lib.${system}.run {
+            (pkgs.lib.fileset.fileFilter (
+                file: file.name == "package.json"
+              )
+              ./packages)
+          ];
+        };
+        inherit nub;
+        hash = "sha256-8mQ8o7LV+sMf06pWyy3Br/fPTlPHni4zZsAqS6vBN7A=";
+      };
+    in {
+      check = pkgs.stdenvNoCC.mkDerivation {
+        name = "check";
+        src = ./.;
+        inherit nubDeps;
+        strictDeps = true;
+        nativeBuildInputs = [pkgs.nodejs_26 nub nubConfigHook];
+        buildPhase = ''
+          runHook preBuild
+          nub run check
+          runHook postBuild
+        '';
+        installPhase = "touch $out";
+      };
+    });
+
+    devShells = forAllSystems (system: pkgs: let
+      inherit (inputs.nub.packages.${system}) nub;
+      gitHooks = git-hooks.lib.${system}.run {
         src = ./.;
         package = pkgs.prek;
-
         hooks = {
-          alejandra.enable = true;
+          alejandra = {
+            enable = true;
+            settings.verbosity = "quiet";
+          };
           oxfmt = {
             enable = true;
             entry = "nub exec oxfmt";
+            extraPackages = [nub];
             types_or = ["json" "ts"];
           };
-          oxlint = {
+          check = {
+            after = ["oxfmt"];
+            always_run = true;
             enable = true;
-            entry = "nub exec oxlint";
-            types_or = ["ts"];
+            entry = "nub run check";
+            extraPackages = [nub];
+            pass_filenames = false;
           };
           statix.enable = true;
         };
       };
-    });
-
-    devShells = forAllSystems (system: pkgs: {
-      default = let
-        inherit (self.checks.${system}.pre-commit-check) shellHook enabledPackages;
-      in
-        pkgs.mkShell {
-          inherit shellHook;
-          packages =
-            enabledPackages
-            ++ [nub.packages.${system}.nub]
-            ++ (with pkgs; [
-              nodejs_26
-            ]);
-        };
+    in {
+      default = pkgs.mkShell {
+        inherit (gitHooks) shellHook;
+        packages =
+          gitHooks.enabledPackages
+          ++ [
+            nub
+            pkgs.nodejs_26
+          ];
+      };
     });
   };
 }

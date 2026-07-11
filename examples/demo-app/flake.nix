@@ -2,12 +2,13 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
   outputs = {nixpkgs, ...}: let
+    systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
     forSystems = systems: function:
       nixpkgs.lib.genAttrs systems (
         system: function system nixpkgs.legacyPackages.${system}
       );
   in {
-    devShells = forSystems nixpkgs.lib.systems.flakeExposed (_system: pkgs: {
+    devShells = forSystems systems (_system: pkgs: {
       default = pkgs.mkShell {
         packages = [pkgs.nodejs_26];
       };
