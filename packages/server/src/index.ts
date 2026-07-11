@@ -2,15 +2,10 @@
 import { createServer } from "node:http"
 
 import { NodeHttpServer, NodeRuntime } from "@effect/platform-node"
-import { Effect, Layer, Schema } from "effect"
+import { Api } from "@tinypaas/api"
+import { Effect, Layer } from "effect"
 import { HttpRouter } from "effect/unstable/http"
-import { HttpApi, HttpApiBuilder, HttpApiEndpoint, HttpApiGroup } from "effect/unstable/httpapi"
-
-const DeploymentsApiGroup = HttpApiGroup.make("deployments")
-	.add(HttpApiEndpoint.post("create", "/", { success: Schema.String }))
-	.prefix("/deployments")
-
-const Api = HttpApi.make("tinypaas").add(DeploymentsApiGroup)
+import { HttpApiBuilder } from "effect/unstable/httpapi"
 
 const DeploymentsHandlers = HttpApiBuilder.group(Api, "deployments", (handlers) =>
 	handlers.handle("create", () => Effect.succeed("Hello, world!")),
