@@ -1,6 +1,8 @@
-import { NodeServices, NodeRuntime } from "@effect/platform-node"
-import { Effect, FileSystem, Path } from "effect"
+import { NodeHttpClient, NodeServices, NodeRuntime } from "@effect/platform-node"
+import { Api } from "@tinypaas/api"
+import { Effect, FileSystem, Layer, Path } from "effect"
 import { Argument, CliError, Command } from "effect/unstable/cli"
+import { HttpApiClient } from "effect/unstable/httpapi"
 
 import packageJson from "../package.json" with { type: "json" }
 
@@ -31,10 +33,18 @@ const path = Argument.path("path", { pathType: "directory", mustExist: true }).p
 		}),
 	),
 )
-const deploy = Command.make("deploy", { path }, () => Effect.void)
+const deploy = Command.make("deploy", { path }, () =>
+	HttpApiClient.make(Api, { baseUrl: "http://localhost:3000" }).pipe(
+		Effect.flatMap((client) => client.deployments.create({})),
+		Effect.tap(Effect.log),
+	),
+)
 
 const tps = Command.make("tps").pipe(Command.withSubcommands([deploy]))
 const program = Command.run(tps, { version: packageJson.version })
 
-// @effect-diagnostics-next-line strictEffectProvide:off
-program.pipe(Effect.provide(NodeServices.layer), NodeRuntime.runMain)
+program.pipe(
+	// @effect-diagnostics-next-line strictEffectProvide:off
+	Effect.provide(Layer.merge(NodeServices.layer, NodeHttpClient.layerUndici)),
+	NodeRuntime.runMain,
+)
