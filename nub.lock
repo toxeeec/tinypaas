@@ -4,6 +4,15 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@effect/platform-node':
+      specifier: 4.0.0-beta.97
+      version: 4.0.0-beta.97
+    effect:
+      specifier: 4.0.0-beta.97
+      version: 4.0.0-beta.97
+
 importers:
 
   .:
@@ -27,19 +36,19 @@ importers:
   packages/cli:
     dependencies:
       '@effect/platform-node':
-        specifier: ^4.0.0-beta.97
+        specifier: 'catalog:'
         version: 4.0.0-beta.97(effect@4.0.0-beta.97)(ioredis@5.11.1)
       effect:
-        specifier: ^4.0.0-beta.97
+        specifier: 'catalog:'
         version: 4.0.0-beta.97
 
   packages/server:
     dependencies:
       '@effect/platform-node':
-        specifier: ^4.0.0-beta.97
+        specifier: 'catalog:'
         version: 4.0.0-beta.97(effect@4.0.0-beta.97)(ioredis@5.11.1)
       effect:
-        specifier: ^4.0.0-beta.97
+        specifier: 'catalog:'
         version: 4.0.0-beta.97
 
 packages:
