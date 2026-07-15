@@ -1,50 +1,40 @@
-import { NodeHttpClient, NodeServices, NodeRuntime } from "@effect/platform-node"
+import { NodeHttpClient, NodeRuntime, NodeServices } from "@effect/platform-node"
 import { Api } from "@tinypaas/api"
-import { Effect, FileSystem, Layer, Path } from "effect"
-import { Argument, CliError, Command } from "effect/unstable/cli"
+import { Effect, Layer } from "effect"
+import { Argument, Command } from "effect/unstable/cli"
 import { HttpApiClient } from "effect/unstable/httpapi"
 
 import packageJson from "../package.json" with { type: "json" }
+import { createDeploymentArchive } from "./deployment/archive.ts"
+import { Git, GitDeploymentPathCollectorLayer } from "./deployment/git.ts"
+import { validateDeploymentDirectory } from "./deployment/validation.ts"
 
 const path = Argument.path("path", { pathType: "directory", mustExist: true }).pipe(
 	Argument.withDefault(process.cwd()),
-	Argument.mapEffect((directory) =>
-		Effect.gen(function* () {
-			const path = yield* Path.Path
-			const fs = yield* FileSystem.FileSystem
-
-			const flakePath = path.join(directory, "flake.nix")
-			const hasFlake = yield* fs.stat(flakePath).pipe(
-				Effect.match({
-					onSuccess: (stat) => stat.type === "File",
-					onFailure: () => false,
-				}),
-			)
-			if (!hasFlake) {
-				return yield* CliError.InvalidValue.make({
-					option: "path",
-					value: directory,
-					expected: "a directory containing flake.nix file",
-					kind: "argument",
-				})
-			}
-
-			return directory
-		}),
-	),
+	Argument.mapEffect(validateDeploymentDirectory),
 )
-const deploy = Command.make("deploy", { path }, () =>
-	HttpApiClient.make(Api, { baseUrl: "http://localhost:3000" }).pipe(
-		Effect.flatMap((client) => client.deployments.create({})),
-		Effect.tap(Effect.log),
-	),
+const deploy = Command.make("deploy", { path }, ({ path }) =>
+	Effect.gen(function* () {
+		const client = yield* HttpApiClient.make(Api, {
+			baseUrl: "http://localhost:3000",
+		})
+		const archive = yield* createDeploymentArchive(path)
+		const result = yield* client.deployments.create({ payload: archive })
+		yield* Effect.log(result)
+	}),
 )
 
 const tps = Command.make("tps").pipe(Command.withSubcommands([deploy]))
 const program = Command.run(tps, { version: packageJson.version })
 
+const platformLayer = NodeServices.layer
+const deploymentLayer = GitDeploymentPathCollectorLayer.pipe(Layer.provide(Git.layer))
+const appLayer = Layer.mergeAll(NodeHttpClient.layerUndici, deploymentLayer).pipe(
+	Layer.provideMerge(platformLayer),
+)
+
 program.pipe(
 	// @effect-diagnostics-next-line strictEffectProvide:off
-	Effect.provide(Layer.merge(NodeServices.layer, NodeHttpClient.layerUndici)),
+	Effect.provide(appLayer),
 	NodeRuntime.runMain,
 )

@@ -40,7 +40,7 @@
           ];
         };
         inherit nub;
-        hash = "sha256-8mQ8o7LV+sMf06pWyy3Br/fPTlPHni4zZsAqS6vBN7A=";
+        hash = "sha256-akyS1cUT+Ij8YMuTb81g2bvhn1/Kaew1flIHqQsdhD4=";
       };
     in {
       check = pkgs.stdenvNoCC.mkDerivation {
@@ -68,14 +68,7 @@
             enable = true;
             settings.verbosity = "quiet";
           };
-          oxfmt = {
-            enable = true;
-            entry = "nub exec oxfmt";
-            extraPackages = [nub];
-            types_or = ["json" "ts"];
-          };
           check = {
-            after = ["oxfmt"];
             always_run = true;
             enable = true;
             entry = "nub run check";

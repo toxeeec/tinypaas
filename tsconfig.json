@@ -54,7 +54,17 @@
 					"strictEffectProvide": "warning",
 					"unnecessaryArrowBlock": "warning",
 					"unsafeEffectTypeAssertion": "error"
-				}
+				},
+				"overrides": [
+					{
+						"include": ["**/*.test.ts"],
+						"options": {
+							"diagnosticSeverity": {
+								"strictEffectProvide": "off"
+							}
+						}
+					}
+				]
 			}
 		]
 	}

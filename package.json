@@ -6,22 +6,22 @@
       "packages/*"
     ],
     "catalog": {
-      "@effect/platform-node": "4.0.0-beta.97",
-      "effect": "4.0.0-beta.97"
+      "@effect/platform-node": "4.0.0-beta.98",
+      "@effect/vitest": "4.0.0-beta.98",
+      "@vitest/runner": "4.1.10",
+      "effect": "4.0.0-beta.98",
+      "vitest": "4.1.10"
     }
   },
   "type": "module",
   "scripts": {
-    "check": "nub run lint && nub run typecheck",
-    "fmt": "oxfmt",
-    "lint": "oxlint",
-    "prepare": "effect-tsgo patch",
-    "typecheck": "nub run --recursive typecheck"
+    "check": "status=0; oxfmt || status=1; oxlint --fix || status=1; nub run --recursive --no-bail typecheck || status=1; nub run --recursive --no-bail test || status=1; exit $status",
+    "prepare": "effect-tsgo patch"
   },
   "devDependencies": {
-    "@effect/tsgo": "0.19.0",
-    "oxfmt": "0.58.0",
-    "oxlint": "1.73.0",
+    "@effect/tsgo": "0.21.0",
+    "oxfmt": "0.59.0",
+    "oxlint": "1.74.0",
     "oxlint-tsgolint": "^0.24.0",
     "typescript": "^7.0.2"
   },

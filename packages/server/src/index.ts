@@ -8,7 +8,9 @@ import { HttpRouter } from "effect/unstable/http"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 
 const DeploymentsHandlers = HttpApiBuilder.group(Api, "deployments", (handlers) =>
-	handlers.handle("create", () => Effect.succeed("Hello, world!")),
+	handlers.handle("create", ({ payload }) =>
+		Effect.succeed(`Received ${payload.byteLength} compressed bytes`),
+	),
 )
 
 const ApiRoutes = HttpApiBuilder.layer(Api, { openapiPath: "/openapi.json" }).pipe(

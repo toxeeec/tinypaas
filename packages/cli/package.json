@@ -5,11 +5,19 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "vitest run",
     "typecheck": "tsc"
   },
   "dependencies": {
     "@effect/platform-node": "catalog:",
     "@tinypaas/api": "workspace:*",
-    "effect": "catalog:"
+    "effect": "catalog:",
+    "isomorphic-git": "^1.38.7",
+    "tar": "^7.5.20"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "@vitest/runner": "catalog:",
+    "vitest": "catalog:"
   }
 }

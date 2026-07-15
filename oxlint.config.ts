@@ -16,6 +16,13 @@ export default defineConfig({
 	rules: {
 		"no-shadow": "off",
 		"no-underscore-dangle": "off",
+		"sort-imports": [
+			"error",
+			{
+				ignoreDeclarationSort: true,
+				ignoreMemberSort: false,
+			},
+		],
 		"typescript/no-explicit-any": "error",
 	},
 })

@@ -3,5 +3,5 @@
 		"module": "NodeNext"
 	},
 	"extends": "../../tsconfig.json",
-	"include": ["src"]
+	"include": ["**/*.ts"]
 }
