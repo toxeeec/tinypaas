@@ -20,6 +20,19 @@
       nixpkgs.lib.genAttrs systems (
         system: function system nixpkgs.legacyPackages.${system}
       );
+    mkGitHooks = system: pkgs: hooks:
+      git-hooks.lib.${system}.run {
+        src = ./.;
+        package = pkgs.prek;
+        inherit hooks;
+      };
+    hooks = {
+      alejandra = {
+        enable = true;
+        settings.verbosity = "quiet";
+      };
+      statix.enable = true;
+    };
   in {
     checks = forAllSystems (system: pkgs: let
       inherit (inputs.nub.packages.${system}) nub;
@@ -43,6 +56,7 @@
         hash = "sha256-akyS1cUT+Ij8YMuTb81g2bvhn1/Kaew1flIHqQsdhD4=";
       };
     in {
+      git-hooks = mkGitHooks system pkgs hooks;
       check = pkgs.stdenvNoCC.mkDerivation {
         name = "check";
         src = ./.;
@@ -60,14 +74,9 @@
 
     devShells = forAllSystems (system: pkgs: let
       inherit (inputs.nub.packages.${system}) nub;
-      gitHooks = git-hooks.lib.${system}.run {
-        src = ./.;
-        package = pkgs.prek;
-        hooks = {
-          alejandra = {
-            enable = true;
-            settings.verbosity = "quiet";
-          };
+      gitHooks = mkGitHooks system pkgs (
+        hooks
+        // {
           check = {
             always_run = true;
             enable = true;
@@ -75,9 +84,14 @@
             extraPackages = [nub];
             pass_filenames = false;
           };
-          statix.enable = true;
-        };
-      };
+          flake-eval = {
+            always_run = true;
+            enable = true;
+            entry = "${pkgs.nix}/bin/nix flake check --no-build --all-systems";
+            pass_filenames = false;
+          };
+        }
+      );
     in {
       default = pkgs.mkShell {
         inherit (gitHooks) shellHook;
