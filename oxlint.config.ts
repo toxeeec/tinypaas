@@ -9,6 +9,7 @@ export default defineConfig({
 	env: {
 		builtin: true,
 	},
+	ignorePatterns: ["repos/**"],
 	options: {
 		typeAware: true,
 	},

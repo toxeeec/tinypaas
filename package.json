@@ -15,7 +15,7 @@
   },
   "type": "module",
   "scripts": {
-    "check": "status=0; oxfmt || status=1; oxlint --fix || status=1; nub run --recursive --no-bail typecheck || status=1; nub run --recursive --no-bail test || status=1; exit $status",
+    "check": "status=0; oxfmt || status=1; oxlint --fix --disable-nested-config || status=1; nub run --recursive --no-bail typecheck || status=1; nub run --recursive --no-bail test || status=1; exit $status",
     "prepare": "effect-tsgo patch"
   },
   "devDependencies": {
