@@ -19,7 +19,7 @@
     "prepare": "effect-tsgo patch"
   },
   "devDependencies": {
-    "@effect/tsgo": "0.21.0",
+    "@effect/tsgo": "0.22.0",
     "oxfmt": "0.59.0",
     "oxlint": "1.74.0",
     "oxlint-tsgolint": "^0.24.0",
